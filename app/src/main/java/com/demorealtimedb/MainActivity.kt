@@ -1,16 +1,18 @@
 package com.demorealtimedb
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ValueEventListener
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +31,19 @@ class MainActivity : AppCompatActivity() {
 
     //Button
     private lateinit var updateUserBtn: Button
+
+    private lateinit var chooseImg: Button
+    private lateinit var uploadImg:Button
+    private lateinit var imgView: ImageView
+    var PICK_IMAGE_REQUEST = 111
+    var filePath: Uri? = null
+    private lateinit var pd: ProgressDialog
+
+    //creating reference to firebase storage
+    var storage = FirebaseStorage.getInstance()
+    var storageRef =
+        storage.getReferenceFromUrl("gs://androidlive-66b3c.appspot.com") //change the url according to your firebase app
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +70,65 @@ class MainActivity : AppCompatActivity() {
                 createUser(name, mobile)
             } else{
                 updateUser(name, mobile)
+            }
+        }
+
+        chooseImg = findViewById(R.id.chooseImg)
+        uploadImg = findViewById(R.id.uploadImg)
+        imgView = findViewById(R.id.imgView)
+
+        pd = ProgressDialog(this)
+        pd!!.setMessage("Uploading....")
+
+
+        chooseImg!!.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                val intent = Intent()
+                intent.type = "image/*"
+                intent.action = Intent.ACTION_PICK
+                startActivityForResult(
+                    Intent.createChooser(intent, "Select Image"),
+                    PICK_IMAGE_REQUEST
+                )
+            }
+        })
+
+        uploadImg!!.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                if (filePath != null) {
+                    pd!!.show()
+                    val childRef = storageRef.child("image.jpg")
+                    //uploading the image
+                    val uploadTask = childRef.putFile(filePath!!)
+                    uploadTask.addOnSuccessListener {
+                        pd!!.dismiss()
+                        Toast.makeText(this@MainActivity,"Upload successful",Toast.LENGTH_SHORT).show()
+                    }.addOnFailureListener { e ->
+                        pd!!.dismiss()
+                        Toast.makeText(this@MainActivity,"Upload Failed -> $e",Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@MainActivity, "Select an image", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            filePath = data.data
+            try { //getting image from gallery
+                val bitmap =
+                    MediaStore.Images.Media.getBitmap(contentResolver, filePath)
+                //Setting image to ImageView
+                imgView!!.setImageBitmap(bitmap)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
@@ -87,7 +161,6 @@ class MainActivity : AppCompatActivity() {
                 if (user == null) {
                     return
                 }
-
 
                 // Display newly updated name and email
                 userNameTv.setText(user?.name).toString()
