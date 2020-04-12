@@ -7,9 +7,6 @@ firebase-realtime-db
 Tutotial Link:
 * https://blog.mindorks.com/firebase-realtime-database-android-tutorial
 * https://www.androidhive.info/2016/10/android-working-with-firebase-realtime-database/
-
-### Not Required below section
-
 <!--
 ### Prerequisites
 
