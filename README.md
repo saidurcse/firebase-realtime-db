@@ -8,6 +8,9 @@ Tutotial Link:
 * https://blog.mindorks.com/firebase-realtime-database-android-tutorial
 * https://www.androidhive.info/2016/10/android-working-with-firebase-realtime-database/
 
+### Not Required below section
+
+<!--
 ### Prerequisites
 
 What things you need to install the software and how to install them
@@ -87,3 +90,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Hat tip to anyone whose code was used
 * Inspiration
 * etc
+-->
