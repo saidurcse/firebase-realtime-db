@@ -3,6 +3,8 @@ package com.demorealtimedb
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,6 +12,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 
@@ -41,9 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     //creating reference to firebase storage
     var storage = FirebaseStorage.getInstance()
-    var storageRef =
-        storage.getReferenceFromUrl("gs://androidlive-66b3c.appspot.com") //change the url according to your firebase app
-
+    var storageRef = storage.getReferenceFromUrl("gs://androidlive-66b3c.appspot.com") //change the url according to your firebase app
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         pd = ProgressDialog(this)
         pd!!.setMessage("Uploading....")
 
-
         chooseImg!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 val intent = Intent()
@@ -112,25 +112,40 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        downloadDataFromFirebase()
     }
 
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
+    override fun onActivityResult(requestCode: Int,resultCode: Int,data: Intent?) {
+
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             filePath = data.data
             try { //getting image from gallery
-                val bitmap =
-                    MediaStore.Images.Media.getBitmap(contentResolver, filePath)
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 //Setting image to ImageView
                 imgView!!.setImageBitmap(bitmap)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun downloadDataFromFirebase() {
+
+        val islandRef = storageRef.child("image.jpg")
+
+        var photoCaptureBitmap: Bitmap
+        val ONE_MEGABYTE = 1024 * 1024.toLong()
+        islandRef.getBytes(ONE_MEGABYTE)
+            .addOnSuccessListener {
+                photoCaptureBitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                Glide.with(this)
+                    .load(photoCaptureBitmap)
+                    .into(imgView)
+            }.addOnFailureListener {
+            }
     }
 
     private fun updateUser(name: String, mobile: String) {
