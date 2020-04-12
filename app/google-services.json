@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "411468485413",
+    "firebase_url": "https://androidlive-66b3c.firebaseio.com",
+    "project_id": "androidlive-66b3c",
+    "storage_bucket": "androidlive-66b3c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411468485413:android:612192e802d585365cc0cc",
+        "android_client_info": {
+          "package_name": "com.demorealtimedb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411468485413-gq0iinqn0vlsrqlnugak1bp9qnv33icl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.demorealtimedb",
+            "certificate_hash": "045fcb03de0d2a0f6dff9a52516f3223670822e4"
+          }
+        },
+        {
+          "client_id": "411468485413-jguk6qaui8ipj4rk2ofns1osdvpes9kp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_lYl-0G9eyF7viWSnXwf-Ai5Vd3QclHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411468485413-jguk6qaui8ipj4rk2ofns1osdvpes9kp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DemoRealTimeDB</string>
+    <string name="dummy_name">Mohammad</string>
+    <string name="dummy_mobile">01917834</string>
+    <string name="update_user_info">Update User Info</string>
+    <string name="name_hint">Name</string>
+    <string name="mobile_hint">Phone</string>
+</resources>
